@@ -1,1 +1,0 @@
-I build this HTML as a gift for my friend
