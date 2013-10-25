@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Flying Flowers</title>
+	<style>
+		#DrawingArea{
+			height:700px;
+		}
+		
+		#flake{
+			position: absolute;
+			top:0;
+			left:0;
+		}
+		
+		#offflake{
+			position: absolute;
+			top:0;
+			left:0;
+		}
+			
+	</style>
+	<script type="text/javascript" src="js/garden_dev.js"></script>
+	<script>
+		var garden;
+		var speed = 100;
+		var delay = 0;
+		var toggle = true;
+		
+		function init(){
+			var canvas = document.getElementById("flakes");
+			var div = document.getElementById("DrawingArea");
+			
+			//canvas.width = window.innerWidth;
+			//canvas.height = window.innerHeight;
+			
+			var ctx = canvas.getContext("2d");
+			
+			canvas.style.display = "block";
+			
+			ctx.globalCompositionOperation="lighter";
+			garden = new Garden(ctx,canvas);
+			
+			draw();	
+		}
+		function draw(){
+			var start;
+			var end;
+			var fps = document.getElementById("fps");
+			start = new Date().getTime();
+			
+			var ctx = document.getElementById("flakes").getContext("2d");
+			ctx.clearRect(0,0,1000,700);
+					
+			if(delay === 0){
+				garden.createRandomBloom(RandomInitPosition(),0);
+				//garden.createRandomBloom(500,300);
+			}
+			delay = (delay+1)%10;
+			
+			garden.render();			
+			end = new Date().getTime();
+			fps.innerHTML = "FPS:"+1000/(end - start) + "<br />"+"No of Flowers" + garden.blooms.length + "<br />"+"Width:"+window.innerWidth + " Height" + window.innerHeight+"<br />";
+			var i = 0;
+
+			if(toggle){
+				window.webkitRequestAnimationFrame(draw);
+			}
+		}
+		
+		function RandomInitPosition(){
+			return Math.floor(Math.random()*window.innerWidth);
+		}
+		
+		function change(){
+			garden.blooms.splice(0,100);
+		}
+		
+		function pause(){
+			toggle = !toggle;
+			draw();
+		}
+		
+	</script>
+</head>
+<body onload="init()">
+<div id="DrawingArea">
+<canvas id="flakes" width="1000" height="700">
+HTML5 is not supported! Please download the latest version of browser.
+</canvas>
+</div>
+<div>
+<input type="button" value="click" onclick="change()" />
+<input type="button" value="pause" onclick="pause()" /><br />
+<span id="fps"></span>
+</div>
+</body>
+</html>

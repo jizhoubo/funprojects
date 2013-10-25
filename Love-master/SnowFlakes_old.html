@@ -1,0 +1,90 @@
+<html>
+<head>
+	<title>Flying Flowers</title>
+	<style>
+		#flake{
+			position: absolute;
+			top:0;
+			left:0;
+		}
+		
+		#offflake{
+			position: absolute;
+			top:0;
+			left:0;
+		}
+			
+	</style>
+	<script type="text/javascript" src="js/garden_dev.js"></script>
+	<script>
+		var garden;
+		var speed = 100;
+		var y = 0;
+		var toggle = true;
+		
+		function init(){
+			var canvaslist=[];
+			var canvas = document.getElementById("flakes");
+			var canvas2 = document.getElementById("offflake");
+			
+			var ctx = canvas.getContext("2d");
+			var ctx2 = canvas2.getContext("2d");
+			
+			canvaslist.push(canvas);
+			canvaslist.push(canvas2);
+			
+			ctx2.moveTo(0,0);
+			ctx2.lineTo(500,500);
+			ctx2.stroke();
+			
+			canvas.style.display = "block";
+			canvas2.style.display = "none";
+			
+			ctx.globalCompositionOperation="lighter";
+			garden = new Garden(ctx,canvas);
+			Garden.options.fallingSpeed = 10;
+			
+			for(var i=0;i<10;i++){
+				garden.createRandomBloom(RandomInitPosition(),y);//Change the y position to simulate the falling effect
+			}
+			setInterval(function(){
+					ctx.clearRect(0,0,1000,700);
+					garden.render();
+				},Garden.options.fallingSpeed);	
+		}
+		
+		function change(){
+			var canvas = document.getElementById("flakes");
+			var canvas2 = document.getElementById("offflake");
+			
+			if(toggle){
+				canvas.style.display = "none";		
+				canvas2.style.display = "block";
+			}
+			else{
+				canvas.style.display = "block";
+				canvas2.style.display = "none";
+			}
+			toggle = !toggle;
+		}
+		
+		function RandomInitPosition(){
+			return Math.floor(Math.random()*1000);
+		}
+		
+	</script>
+</head>
+<body onload="init()">
+<div id="DrawingArea" style="width:1000px;height:700px" >
+<canvas id="flakes" width="1000" height="700">
+HTML5 is not supported! Please download the latest version of browser.
+</canvas>
+<canvas id="offflake" width="1000" height="700">
+HTML5 is not supported! Please download the latest version of browser.
+</canvas>
+</div>
+<div>
+<input type="button" value="click" onclick="change()" />
+</div>
+</body>
+</html>

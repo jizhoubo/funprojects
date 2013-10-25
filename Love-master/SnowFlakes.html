@@ -1,0 +1,116 @@
+<html>
+<head>
+	<title>Flying Flowers</title>
+	<style>
+		#flake{
+			position: absolute;
+			top:0;
+			left:0;
+		}
+		
+		#offflake{
+			position: absolute;
+			top:0;
+			left:0;
+			visibility: hidden;
+		}
+			
+	</style>
+	<script type="text/javascript" src="js/garden_dev.js"></script>
+	
+</head>
+<body onload="init()">
+<div id="DrawingArea" style="width:1000px;height:700px" >
+<canvas id="flakes" width="1000" height="700">
+HTML5 is not supported! Please download the latest version of browser.
+</canvas>
+<canvas id="offflake" style="width:1000px;height:700px">
+HTML5 is not supported! Please download the latest version of browser.
+</canvas>
+</div>
+<div>
+<input type="button" value="click" onclick="change()" />
+</div>
+<script>
+		var garden;
+		var speed = 100;
+		var y = 0;
+		var toggle = true;
+		
+		function init(){
+			var canvaslist=[];
+			var canvasbounds = { width: window.innerWidth, height: window.innerHeight - 100 };
+			var canvas = document.getElementById("flakes");
+			var canvas2 = document.getElementById("offflake");
+			// canvas.style.width = canvasbounds.width;
+			// canvas.style.height = canvasbounds.height;
+			// canvas2.style.width = canvasbounds.width;
+			// canvas2.style.height = canvasbounds.height;
+
+			
+			var ctx = canvas.getContext("2d");
+			// var ctx2 = canvas2.getContext("2d");
+			
+			canvaslist.push(canvas);
+			canvaslist.push(canvas2);
+			
+			// ctx2.moveTo(0,0);
+			// ctx2.lineTo(500,500);
+			// ctx2.stroke();
+			
+			canvas.style.display = "block";
+			// canvas2.style.display = "none";
+			
+			ctx.globalCompositionOperation="lighter";
+			garden = new Garden(ctx,canvas);
+			// garden2 = new Garden(ctx2,canvas);
+			Garden.options.fallingSpeed = 10;
+			var i = 0;
+			
+			setInterval(function(){
+				// if(i === 0) {
+					
+				// }
+				for(var i=0;i<1;i++){
+					garden.createRandomBloom(RandomInitPosition(),y);//Change the y position to simulate the falling effect
+				// garden2.createRandomBloom(RandomInitPosition(),y);
+				if(garden.blooms.length>1000) {
+					for(var j=0;j<50;j++) {
+						garden.removeBloom(garden.blooms[Garden.randomInt(0,1000)]);		
+					}
+				}
+				// if(garden2.blooms.length>200) {
+				// 	for(var j=0;j<50;j++) {
+				// 		garden.removeBloom(garden.blooms[Garden.randomInt(0,200)]);		
+				// 	}
+				// }
+
+				
+				}
+					ctx.clearRect(0,0,1000,700);
+					garden.render();
+				},40);	
+		}
+		
+		function change(){
+			var canvas = document.getElementById("flakes");
+			var canvas2 = document.getElementById("offflake");
+			
+			if(toggle){
+				canvas.style.display = "none";		
+				canvas2.style.display = "block";
+			}
+			else{
+				canvas.style.display = "block";
+				canvas2.style.display = "none";
+			}
+			toggle = !toggle;
+		}
+		
+		function RandomInitPosition(){
+			return Math.floor(Math.random()*1000);
+		}
+		
+	</script>
+</body>
+</html>
